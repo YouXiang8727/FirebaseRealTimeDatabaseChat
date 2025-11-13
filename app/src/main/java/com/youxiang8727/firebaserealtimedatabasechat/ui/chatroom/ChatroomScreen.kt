@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -90,6 +91,7 @@ fun ChatroomScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .padding(16.dp)
                 .imePadding()
         ) {
             LazyColumn(
@@ -160,18 +162,30 @@ private fun MessageBubble(
                     AsyncImage(
                         modifier = Modifier.size(32.dp)
                             .clip(CircleShape),
-                        model = user.avatar.drawable,
+                        model = message.sender.avatar.drawable,
                         contentDescription = null,
                     )
 
                     Text(
-                        text = user.username,
+                        text = message.sender.username,
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
 
-            Card {
+            Card(
+                colors = if (isSelf) {
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                } else {
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            ) {
                 Text(
                     modifier = Modifier.padding(8.dp),
                     text = message.body,
