@@ -32,6 +32,7 @@ class FirebaseRealTimeDatabaseRepositoryImpl(
 
             val ref = chatroomListReference.child(chatroomId).child("users").child(user.uid)
             ref.setValue(user).await()
+            ref.onDisconnect().removeValue()
         }
     }
 

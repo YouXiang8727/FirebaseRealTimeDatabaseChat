@@ -25,13 +25,18 @@ suspend fun DatabaseReference.runTransactionAwait(
             currentData: DataSnapshot?
         ) {
             Log.d("runTransactionAwait", "onComplete: $error, $committed, $currentData")
-            if (error != null) coroutine.resumeWithException(RuntimeException(error.message))
-
-            if (committed.not()) coroutine.resumeWithException(RuntimeException("Transaction failed"))
-
-            onSuccess()
-
-            coroutine.resume(Unit)
+            when {
+                error != null -> coroutine.resumeWithException(RuntimeException(error.message))
+                !committed -> coroutine.resumeWithException(RuntimeException("Transaction failed"))
+                else -> {
+                    try {
+                        onSuccess()
+                        coroutine.resume(Unit)
+                    } catch (e: Exception) {
+                        coroutine.resumeWithException(e)
+                    }
+                }
+            }
         }
     })
 }
