@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.youxiang8727.firebaserealtimedatabasechat.core.mvi.MviViewModel
 import com.youxiang8727.firebaserealtimedatabasechat.domain.model.Message
 import com.youxiang8727.firebaserealtimedatabasechat.domain.model.User
+import com.youxiang8727.firebaserealtimedatabasechat.domain.model.toUiModel
 import com.youxiang8727.firebaserealtimedatabasechat.domain.usecase.chatroom.ChatroomMessagesFlowUseCase
 import com.youxiang8727.firebaserealtimedatabasechat.domain.usecase.chatroom.ChatroomUsersFlowUseCase
 import com.youxiang8727.firebaserealtimedatabasechat.domain.usecase.chatroom.LeaveChatroomUseCase
@@ -101,7 +102,7 @@ class ChatroomScreenViewModel @AssistedInject constructor(
         viewModelScope.launch {
             chatroomMessagesFlow.collect {
                 dispatch(
-                    ChatroomScreenUiEvent.OnNewMessage(message = it)
+                    ChatroomScreenUiEvent.OnNewMessage(message = it.toUiModel(user = user))
                 )
             }
         }

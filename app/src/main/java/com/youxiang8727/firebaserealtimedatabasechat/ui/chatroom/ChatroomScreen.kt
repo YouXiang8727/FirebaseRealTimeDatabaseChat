@@ -1,26 +1,20 @@
 package com.youxiang8727.firebaserealtimedatabasechat.ui.chatroom
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -33,15 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.Image
-import coil3.compose.AsyncImage
-import com.youxiang8727.firebaserealtimedatabasechat.domain.model.Message
 import com.youxiang8727.firebaserealtimedatabasechat.domain.model.User
-import com.youxiang8727.firebaserealtimedatabasechat.domain.model.isSelf
+import com.youxiang8727.firebaserealtimedatabasechat.ui.chatroom.message.MessageView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,9 +90,9 @@ fun ChatroomScreen(
                     .weight(1f)
             ) {
                 items(state.messages) { message ->
-                    MessageBubble(
-                        message = message,
-                        user = user
+                    MessageView(
+                        modifier = Modifier,
+                        messageUiModel = message
                     )
                 }
             }
@@ -131,66 +121,6 @@ fun ChatroomScreen(
                         contentDescription = null
                     )
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun MessageBubble(
-    modifier: Modifier = Modifier,
-    message: Message,
-    user: User
-) {
-    val isSelf = remember {
-        message.isSelf(user)
-    }
-
-    Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = if (isSelf) Alignment.CenterEnd else Alignment.CenterStart
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            if (isSelf.not()) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    AsyncImage(
-                        modifier = Modifier.size(32.dp)
-                            .clip(CircleShape),
-                        model = message.sender.avatar.drawable,
-                        contentDescription = null,
-                    )
-
-                    Text(
-                        text = message.sender.username,
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                }
-            }
-
-            Card(
-                colors = if (isSelf) {
-                    CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                } else {
-                    CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            ) {
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = message.body,
-                    style = MaterialTheme.typography.bodyLarge
-                )
             }
         }
     }

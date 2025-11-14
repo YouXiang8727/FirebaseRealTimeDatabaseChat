@@ -1,5 +1,6 @@
 package com.youxiang8727.firebaserealtimedatabasechat.domain.usecase.chatroom
 
+import android.util.Log
 import com.youxiang8727.firebaserealtimedatabasechat.domain.model.User
 import com.youxiang8727.firebaserealtimedatabasechat.domain.repository.FirebaseRealTimeDatabaseRepository
 import javax.inject.Inject
