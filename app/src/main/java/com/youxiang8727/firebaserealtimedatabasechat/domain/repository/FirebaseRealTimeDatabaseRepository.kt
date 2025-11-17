@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface FirebaseRealTimeDatabaseRepository {
-    val chatroomListReference: DatabaseReference
-
     suspend fun joinChatroom(chatroomId: String, user: User)
 
     suspend fun createChatroom(chatroomId: String, user: User)

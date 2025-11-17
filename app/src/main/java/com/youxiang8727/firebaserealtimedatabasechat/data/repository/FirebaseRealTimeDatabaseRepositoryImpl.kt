@@ -22,7 +22,7 @@ import kotlinx.coroutines.withContext
 class FirebaseRealTimeDatabaseRepositoryImpl(
     database: FirebaseDatabase
 ): FirebaseRealTimeDatabaseRepository {
-    override val chatroomListReference: DatabaseReference = database.getReference("chatroom")
+    private val chatroomListReference: DatabaseReference = database.getReference("chatroom")
 
     override suspend fun joinChatroom(chatroomId: String, user: User) {
         withContext(Dispatchers.IO) {
